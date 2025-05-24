@@ -1,0 +1,141 @@
+/* src/components/Game.css */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* Space between elements */
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 500px; /* Control max width of game area */
+  margin: 0 auto;
+}
+
+.status-bar {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background-color: #eef2f7;
+  border-radius: 6px;
+  min-height: 60px; 
+}
+
+.message {
+  font-size: 1.1em;
+  font-weight: 500;
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.message.winner-message {
+  color: #28a745; 
+  font-size: 1.3em;
+}
+
+.current-emoji-display {
+  font-size: 1em;
+  margin: 0;
+}
+
+.emoji-char {
+  font-size: 1.8em;
+  display: inline-block;
+  animation: popIn 0.3s ease-out; 
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.game-controls {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.control-button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  font-size: 1em;
+  border-radius: 5px;
+}
+
+.control-button.help-button {
+  background-color: #6c757d;
+}
+
+.control-button:hover {
+  opacity: 0.85;
+}
+
+.player-info-panel {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.player-info {
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  width: 45%;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.player-info.active-player {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.player-info strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95em;
+}
+
+.emoji-queue {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  min-height: 30px; 
+}
+
+.emoji-char-small {
+  font-size: 1.5em;
+  padding: 2px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+
+@media (max-width: 600px) {
+  .game-container {
+    padding: 15px;
+  }
+  .status-bar {
+    min-height: 50px;
+  }
+  .message {
+    font-size: 1em;
+  }
+  .message.winner-message {
+    font-size: 1.1em;
+  }
+  .player-info-panel {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .player-info {
+    width: 100%;
+  }
+}

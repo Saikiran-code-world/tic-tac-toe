@@ -1,0 +1,27 @@
+/* src/components/Board.css */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(80px, 1fr)); /* Responsive cells */
+  grid-template-rows: repeat(3, minmax(80px, 1fr));    /* Responsive cells */
+  gap: 8px;
+  border: 2px solid #6c757d;
+  padding: 8px;
+  background-color: #e9ecef;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 350px; /* Max width of the board itself */
+  aspect-ratio: 1 / 1; /* Keep it square */
+  margin: 0 auto; /* Center board if game-container is wider */
+}
+
+.board.disabled {
+  opacity: 0.8;
+}
+
+/* Basic responsiveness for the board cells */
+@media (max-width: 400px) {
+  .board {
+    gap: 5px;
+    padding: 5px;
+  }
+}

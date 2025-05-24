@@ -1,0 +1,103 @@
+/* src/components/Cell.css */
+.cell {
+  width: 100%; /* Fill grid area */
+  height: 100%; /* Fill grid area */
+  background-color: #ffffff;
+  border: 2px solid #adb5bd;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5em; /* Base size for emojis */
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease, transform 0.1s ease,
+    box-shadow 0.2s ease;
+  position: relative; /* For potential ::before/::after effects or absolutely positioned children */
+}
+
+.cell:not(:disabled):hover {
+  background-color: #e9ecef;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.cell:disabled {
+  cursor: not-allowed;
+}
+
+.cell.filled {
+  /* Styles for cells that have an emoji and are disabled */
+  /* The player-specific background will override this if applied */
+}
+
+.cell.player1 .emoji-display {
+  /* Example: could add a subtle background or border */
+  /* background-color: rgba(0, 123, 255, 0.1); */
+}
+.cell.player2 .emoji-display {
+  /* Example: could add a subtle background or border */
+  /* background-color: rgba(255, 193, 7, 0.1); */
+}
+
+.cell.disabled-empty {
+  /* Style for empty cells when game is over or not clickable */
+  background-color: #f8f9fa;
+}
+
+.cell.vacated-temporarily {
+  background-color: #ffe0e0; /* Light red to indicate temporary block */
+  border-color: #dc3545;
+}
+
+.vacated-marker {
+  font-size: 0.8em; /* Smaller than emoji */
+  color: #dc3545;
+  opacity: 0.7;
+}
+
+.emoji-display {
+  display: inline-block;
+  animation: emojiPlace 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy placement */
+  line-height: 1; /* Helps center emojis better */
+}
+
+@keyframes emojiPlace {
+  0% {
+    transform: scale(0.3) rotate(-30deg);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.cell.winning-cell {
+  background-color: #d4edda; /* Light green for winning cells */
+  border-color: #28a745;
+  animation: pulseWin 0.8s infinite alternate;
+}
+
+@keyframes pulseWin {
+  0% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+  }
+}
+
+/* Responsive font size for emojis in cells */
+@media (max-width: 480px) {
+  .cell {
+    font-size: 2em;
+  }
+}
+@media (max-width: 360px) {
+  .cell {
+    font-size: 1.7em;
+  }
+}

@@ -1,0 +1,71 @@
+/* src/components/EmojiCategorySelector.css */
+.category-selector-container {
+  background-color: #fff;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 450px;
+  margin: 20px auto;
+}
+
+.category-selector-container h2 {
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 1.6em;
+}
+
+.category-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.player-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align labels to the left */
+  gap: 8px;
+}
+
+.player-selection label {
+  font-weight: 500;
+  font-size: 1.05em;
+  color: #555;
+}
+
+.player-selection select {
+  width: 100%;
+  padding: 12px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  background-color: #f8f9fa;
+  box-sizing: border-box; /* Ensure padding doesn't expand width */
+}
+
+.start-game-button {
+  background-color: #28a745; /* Green for start */
+  color: white;
+  padding: 12px 20px;
+  font-size: 1.1em;
+  border-radius: 5px;
+  margin-top: 15px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.start-game-button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.start-game-button:not(:disabled):hover {
+  background-color: #218838;
+}
+
+.category-warning {
+  color: #dc3545; /* Red for warning */
+  font-size: 0.9em;
+  margin-top: 10px;
+}
