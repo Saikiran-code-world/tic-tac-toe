@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1>✨ Blink Tac Toe ✨</h1>
+        <h2>✨ Blink Tac Toe ✨</h2>
       </header>
       <main>
         <Game />

@@ -1,36 +1,29 @@
-/* src/App.css */
 .app-container {
-  text-align: center;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 40px); /* Full viewport height minus body padding */
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f7fa;
 }
 
 .app-header {
-  background-color: #4a90e2;
-  padding: 15px 0;
+  background: #0d6efd;
+  padding: 12px 0;
   color: white;
-  border-radius: 8px 8px 0 0;
-  box-shadow: 0 2px 4px rgba(249, 249, 249, 0.1);
+  border-radius: 0 0 8px 8px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: 2em;
+  font-weight: 700;
+  font-size: 1.6rem;
 }
 
 main {
-  flex-grow: 1; 
-  padding: 20px;
-  background-color: #f0ebeb;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.app-footer {
-  padding: 15px 0;
-  font-size: 0.9em;
-  color: #777;
-  background-color: #e9ecef;
-  border-radius: 0 0 8px 8px;
-  margin-top: auto; 
+  flex-grow: 1;
+  padding: 20px 10px;
+  display: flex;
+  justify-content: center;
 }

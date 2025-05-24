@@ -19,15 +19,14 @@ const Game = () => {
   const [currentPlayer, setCurrentPlayer] = useState(PLAYER_1);
   const [player1Category, setPlayer1Category] = useState(null);
   const [player2Category, setPlayer2Category] = useState(null);
-  const [player1Emojis, setPlayer1Emojis] = useState([]); // { emoji, cellIndex, id }
-  const [player2Emojis, setPlayer2Emojis] = useState([]); // { emoji, cellIndex, id }
+  const [player1Emojis, setPlayer1Emojis] = useState([]);
+  const [player2Emojis, setPlayer2Emojis] = useState([]);
   const [currentTurnEmoji, setCurrentTurnEmoji] = useState(null);
   const [gamePhase, setGamePhase] = useState(GAME_PHASES.CATEGORY_SELECTION);
   const [winner, setWinner] = useState(null);
-  const [message, setMessage] = useState(
-    "Select your emoji categories to start!"
-  );
-  const [vacatedCellThisTurn, setVacatedCellThisTurn] = useState(null); // For vanishing rule
+  const [isDraw, setIsDraw] = useState(false);
+  const [message, setMessage] = useState("Select your emoji categories to start!");
+  const [vacatedCellThisTurn, setVacatedCellThisTurn] = useState(null);
   const [showHelp, setShowHelp] = useState(false);
   const [winningLine, setWinningLine] = useState([]);
 
@@ -38,7 +37,7 @@ const Game = () => {
   }, []);
 
   useEffect(() => {
-    if (gamePhase === GAME_PHASES.PLAYING && !winner) {
+    if (gamePhase === GAME_PHASES.PLAYING && !winner && !isDraw) {
       const category =
         currentPlayer === PLAYER_1 ? player1Category : player2Category;
       setCurrentTurnEmoji(getRandomEmoji(category));
@@ -54,6 +53,7 @@ const Game = () => {
     player1Category,
     player2Category,
     winner,
+    isDraw,
     getRandomEmoji,
   ]);
 
@@ -61,21 +61,16 @@ const Game = () => {
     setPlayer1Category(p1Category);
     setPlayer2Category(p2Category);
     setGamePhase(GAME_PHASES.PLAYING);
-    setCurrentPlayer(PLAYER_1); // Player 1 starts
-    setMessage(""); // Message will be set by useEffect
+    setCurrentPlayer(PLAYER_1);
+    setMessage(""); // Updated in useEffect
   };
 
   const checkWinCondition = useCallback(
     (currentBoard) => {
       const lines = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8], // rows
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8], // cols
-        [0, 4, 8],
-        [2, 4, 6], // diagonals
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6],
       ];
       for (let line of lines) {
         const [a, b, c] = line;
@@ -84,18 +79,14 @@ const Game = () => {
           currentBoard[a].player === currentBoard[b]?.player &&
           currentBoard[a].player === currentBoard[c]?.player
         ) {
-          // Check if all emojis in the line belong to the *same* category of the winning player
           const winningPlayer = currentBoard[a].player;
-          const playerCategoryKey =
-            winningPlayer === PLAYER_1 ? player1Category : player2Category;
-
+          const categoryKey = winningPlayer === PLAYER_1 ? player1Category : player2Category;
           const isEmojiFromCategory = (emoji, categoryKey) =>
             EMOJI_CATEGORIES[categoryKey]?.emojis.includes(emoji);
-
           if (
-            isEmojiFromCategory(currentBoard[a].emoji, playerCategoryKey) &&
-            isEmojiFromCategory(currentBoard[b].emoji, playerCategoryKey) &&
-            isEmojiFromCategory(currentBoard[c].emoji, playerCategoryKey)
+            isEmojiFromCategory(currentBoard[a].emoji, categoryKey) &&
+            isEmojiFromCategory(currentBoard[b].emoji, categoryKey) &&
+            isEmojiFromCategory(currentBoard[c].emoji, categoryKey)
           ) {
             setWinningLine(line);
             return winningPlayer;
@@ -107,17 +98,20 @@ const Game = () => {
     [player1Category, player2Category]
   );
 
+  const checkDrawCondition = (boardState) => {
+    return boardState.every((cell) => cell !== null);
+  };
+
   const handleCellClick = (index) => {
     if (
       gamePhase !== GAME_PHASES.PLAYING ||
       board[index] ||
       winner ||
+      isDraw ||
       vacatedCellThisTurn === index
     ) {
       if (vacatedCellThisTurn === index) {
-        setMessage(
-          "Cannot place on the cell where an emoji just vanished this turn. Try another cell!"
-        );
+        setMessage("Cannot place on the cell just vacated this turn. Try another!");
       }
       return;
     }
@@ -125,15 +119,14 @@ const Game = () => {
     const newBoard = [...board];
     let newPlayerEmojis =
       currentPlayer === PLAYER_1 ? [...player1Emojis] : [...player2Emojis];
-    const newEmojiId = crypto.randomUUID(); // Unique ID for the emoji instance
+    const newEmojiId = crypto.randomUUID();
 
-    // Vanishing rule
     if (newPlayerEmojis.length >= MAX_EMOJIS_PER_PLAYER) {
-      const oldestEmoji = newPlayerEmojis.shift(); // Remove oldest (FIFO)
-      newBoard[oldestEmoji.cellIndex] = null; // Clear from board
-      setVacatedCellThisTurn(oldestEmoji.cellIndex); // Mark this cell as vacated for this turn
+      const oldest = newPlayerEmojis.shift();
+      newBoard[oldest.cellIndex] = null;
+      setVacatedCellThisTurn(oldest.cellIndex);
     } else {
-      setVacatedCellThisTurn(null); // Reset if no vanishing occurred
+      setVacatedCellThisTurn(null);
     }
 
     newBoard[index] = {
@@ -158,15 +151,17 @@ const Game = () => {
     if (gameWinner) {
       setWinner(gameWinner);
       setGamePhase(GAME_PHASES.WON);
-      const winnerCategoryName =
+      const categoryName =
         EMOJI_CATEGORIES[
           gameWinner === PLAYER_1 ? player1Category : player2Category
         ]?.name || `Player ${gameWinner}`;
-      setMessage(`${winnerCategoryName} (Player ${gameWinner}) Wins! 🎉`);
+      setMessage(`${categoryName} (Player ${gameWinner}) Wins! 🎉`);
+    } else if (checkDrawCondition(newBoard)) {
+      setIsDraw(true);
+      setGamePhase(GAME_PHASES.WON);
+      setMessage("It's a Draw! 🤝");
     } else {
-      // Switch player only if no winner
       setCurrentPlayer(currentPlayer === PLAYER_1 ? PLAYER_2 : PLAYER_1);
-      // Message for next turn will be set by useEffect
     }
   };
 
@@ -178,6 +173,7 @@ const Game = () => {
     setCurrentTurnEmoji(null);
     setGamePhase(GAME_PHASES.CATEGORY_SELECTION);
     setWinner(null);
+    setIsDraw(false);
     setMessage("Select your emoji categories to start!");
     setPlayer1Category(null);
     setPlayer2Category(null);
@@ -191,9 +187,7 @@ const Game = () => {
         categories={EMOJI_CATEGORIES}
         onSelection={handleCategorySelection}
         player1Default={Object.keys(EMOJI_CATEGORIES)[0]}
-        player2Default={
-          Object.keys(EMOJI_CATEGORIES)[1] || Object.keys(EMOJI_CATEGORIES)[0]
-        }
+        player2Default={Object.keys(EMOJI_CATEGORIES)[1] || Object.keys(EMOJI_CATEGORIES)[0]}
       />
     );
   }
@@ -201,8 +195,8 @@ const Game = () => {
   return (
     <div className="game-container">
       <div className="status-bar">
-        <p className={`message ${winner ? "winner-message" : ""}`}>{message}</p>
-        {!winner && gamePhase === GAME_PHASES.PLAYING && currentTurnEmoji && (
+        <p className={`message ${winner || isDraw ? "winner-message" : ""}`}>{message}</p>
+        {!winner && !isDraw && gamePhase === GAME_PHASES.PLAYING && currentTurnEmoji && (
           <p className="current-emoji-display">
             Your emoji: <span className="emoji-char">{currentTurnEmoji}</span>
           </p>
@@ -212,7 +206,7 @@ const Game = () => {
       <Board
         cells={board}
         onCellClick={handleCellClick}
-        disabled={gamePhase !== GAME_PHASES.PLAYING || !!winner}
+        disabled={gamePhase !== GAME_PHASES.PLAYING || !!winner || isDraw}
         vacatedCellThisTurn={vacatedCellThisTurn}
         winningLine={winningLine}
       />
@@ -221,10 +215,7 @@ const Game = () => {
         <button onClick={resetGame} className="control-button">
           {gamePhase === GAME_PHASES.WON ? "Play Again" : "Restart Game"}
         </button>
-        <button
-          onClick={() => setShowHelp(true)}
-          className="control-button help-button"
-        >
+        <button onClick={() => setShowHelp(true)} className="control-button help-button">
           Help
         </button>
       </div>
@@ -232,41 +223,23 @@ const Game = () => {
       {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
 
       <div className="player-info-panel">
-        <div
-          className={`player-info ${
-            currentPlayer === PLAYER_1 && gamePhase === GAME_PHASES.PLAYING
-              ? "active-player"
-              : ""
-          }`}
-        >
+        <div className={`player-info ${currentPlayer === PLAYER_1 && gamePhase === GAME_PHASES.PLAYING ? "active-player" : ""}`}>
           <strong>
-            Player 1 ({EMOJI_CATEGORIES[player1Category]?.name || "N/A"})
-            Emojis:
+            Player 1 ({EMOJI_CATEGORIES[player1Category]?.name || "N/A"}) Emojis:
           </strong>
           <div className="emoji-queue">
             {player1Emojis.map((e) => (
-              <span key={e.id} className="emoji-char-small">
-                {e.emoji}
-              </span>
+              <span key={e.id} className="emoji-char-small">{e.emoji}</span>
             ))}
           </div>
         </div>
-        <div
-          className={`player-info ${
-            currentPlayer === PLAYER_2 && gamePhase === GAME_PHASES.PLAYING
-              ? "active-player"
-              : ""
-          }`}
-        >
+        <div className={`player-info ${currentPlayer === PLAYER_2 && gamePhase === GAME_PHASES.PLAYING ? "active-player" : ""}`}>
           <strong>
-            Player 2 ({EMOJI_CATEGORIES[player2Category]?.name || "N/A"})
-            Emojis:
+            Player 2 ({EMOJI_CATEGORIES[player2Category]?.name || "N/A"}) Emojis:
           </strong>
           <div className="emoji-queue">
             {player2Emojis.map((e) => (
-              <span key={e.id} className="emoji-char-small">
-                {e.emoji}
-              </span>
+              <span key={e.id} className="emoji-char-small">{e.emoji}</span>
             ))}
           </div>
         </div>
