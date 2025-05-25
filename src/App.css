@@ -27,3 +27,9 @@ main {
   display: flex;
   justify-content: center;
 }
+
+.app-footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

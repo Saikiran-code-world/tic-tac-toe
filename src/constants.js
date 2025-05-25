@@ -1,9 +1,12 @@
 
+// src/constants.js
 export const EMOJI_CATEGORIES = {
-  ANIMALS: { name: 'Animals', emojis: ['🐶', '🐱', '🐭', '🦊', '🐻', '🐼'] },
-  FOOD: { name: 'Food', emojis: ['🍎', '🍌', '🍇', '🍓', '🍕', '🍔'] },
-  SPORTS: { name: 'Sports', emojis: ['⚽️', '🏀', '🏈', '⚾️', '🎾', '🏐'] },
-  FACES: { name: 'Faces', emojis: ['😀', '😂', '😍', '🥳', '🤯', '😱'] },
+  ANIMALS: { name: 'Animals', emojis: ['🐶', '🐱', '🐭', '🦊', '🐻', '🐼', '🦁', '🐯'] }, 
+  FOOD: { name: 'Food', emojis: ['🍎', '🍌', '🍇', '🍓', '🍕', '🍔', '🌮', '🍩'] }, 
+  SPORTS: { name: 'Sports', emojis: ['⚽️', '🏀', '🏈', '⚾️', '🎾', '🏐', '🎱', '🏓'] }, 
+  FACES: { name: 'Faces', emojis: ['😀', '😂', '😍', '🥳', '🤯', '😱', '🤔', '😇'] }, 
+  TRAVEL: { name: 'Travel', emojis: ['✈️', '🚂', '🚀', '⛵️', '🚗', '🚲', '🗺️', '🏝️'] },
+  WEATHER: { name: 'Weather', emojis: ['☀️', '☁️', '🌧️', '❄️', '⚡️', '🌈', '🌪️', '🌊'] },
 };
 
 export const PLAYER_1 = 1;

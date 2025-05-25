@@ -1,20 +1,21 @@
 .category-selector-container {
   background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
-  padding: 30px 35px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  padding: 1.875rem 1.5rem; 
+  border-radius: 1rem; 
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.4); 
   text-align: center;
   width: 100%;
-  max-width: 480px;
-  margin: 30px auto;
+  max-width: 30rem; 
+  margin: 1.875rem auto; 
   color: #f1f1f1;
   animation: fadeInContainer 0.5s ease-in-out;
+  box-sizing: border-box;
 }
 
 @keyframes fadeInContainer {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(1.25rem); 
   }
   to {
     opacity: 1;
@@ -24,40 +25,44 @@
 
 .category-selector-container h2 {
   color: #ffffff;
-  font-size: 1.8em;
-  margin-bottom: 25px;
+  font-size: 1.6rem; 
+  margin-bottom: 1.5rem; 
   letter-spacing: 0.5px;
 }
 
 .category-form {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 1.375rem; 
 }
 
 .player-selection {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
+  gap: 0.625rem; 
 }
 
 .player-selection label {
   font-weight: 500;
-  font-size: 1.1em;
+  font-size: 1rem; 
   color: #cccccc;
 }
 
 .player-selection select {
   width: 100%;
-  padding: 12px 14px;
+  padding: 0.75rem 0.875rem; 
   border: 2px solid #444;
-  border-radius: 8px;
-  font-size: 1.05em;
+  border-radius: 0.5rem; 
+  font-size: 1rem; 
   background-color: #2e2e2e;
   color: #f1f1f1;
   box-sizing: border-box;
-  appearance: none;
+  appearance: none; 
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cccccc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.2em;
   transition: border-color 0.3s ease;
 }
 
@@ -66,24 +71,25 @@
 }
 
 .player-selection option {
-  background-color: #1e1e1e;
+  background-color: #2e2e2e; 
   color: #f1f1f1;
-  font-size: 1em;
+  font-size: 1rem; 
 }
 
 .player-selection option:disabled {
   color: #888;
+  background-color: #252525; 
 }
 
 .start-game-button {
   background-color: #00c572;
   color: white;
-  padding: 12px 24px;
-  font-size: 1.15em;
+  padding: 0.75rem 1.5rem; 
+  font-size: 1.1rem; 
   font-weight: 600;
   border: none;
-  border-radius: 8px;
-  margin-top: 10px;
+  border-radius: 0.5rem; 
+  margin-top: 0.625rem; 
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
@@ -91,6 +97,7 @@
 .start-game-button:disabled {
   background-color: #666;
   cursor: not-allowed;
+  transform: none; 
 }
 
 .start-game-button:not(:disabled):hover {
@@ -100,10 +107,9 @@
 
 .category-warning {
   color: #ff4d4f;
-  font-size: 0.95em;
-  margin-top: 12px;
+  font-size: 0.9rem; 
+  margin-top: 0.75rem; 
 }
-
 
 .player-selection select option,
 .player-selection select {
@@ -111,4 +117,28 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@media (max-width: 480px) {
+  .category-selector-container {
+    padding: 1.5rem 1.25rem; 
+    margin: 1.25rem auto; 
+    max-width: 90vw; 
+  }
+  .category-selector-container h2 {
+    font-size: 1.5rem;
+  }
+  .player-selection label,
+  .player-selection select,
+  .start-game-button,
+  .category-warning {
+    font-size: 0.95rem; 
+  }
+  .start-game-button {
+     padding: 0.625rem 1.25rem; 
+  }
+  .player-selection select {
+    padding: 0.625rem 0.75rem;
+    background-position: right 0.5rem center;
+  }
 }
